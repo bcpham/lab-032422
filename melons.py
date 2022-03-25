@@ -1,10 +1,11 @@
 """Classes for melon orders."""
 
 import random
+import datetime
+
 
 class AbstractMelonOrder:
     """An abstract base class that other Melon Orders inherit from."""
-
 
     def __init__(self, species, qty, order_type, tax):
         self.species = species
@@ -13,11 +14,25 @@ class AbstractMelonOrder:
         self.order_type = order_type
         self.tax = tax    
 
-    @staticmethod
-    def get_base_price():
+    # didn't use static method because we don't want to get aa baseprice before having an order
+    # you need an order before having a base price
+    
+    def get_base_price(self):
         """Calculate base price"""
+        # add $4 if order is made 8-11am Mon-Fri
 
-        return random.randint(5, 9)
+        base_price = random.randint(5, 9)
+        now = datetime.datetime.now()
+        print(now)
+        print(now.hour)
+        print(now.weekday())
+
+        # datetime.now() is a class method
+        # datetime.now.hour = class attribute; datetime.weekday() is instance method
+        if 8 <= now.hour <= 11 and 0 <= now.weekday() <= 4:
+            base_price += 4
+
+        return base_price
 
     def get_total(self):
         """Calculate price, including tax."""
